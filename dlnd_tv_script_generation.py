@@ -163,7 +163,7 @@ helper.preprocess_and_save_data(data_dir, token_lookup, create_lookup_tables)
 # # Check Point
 # This is your first checkpoint. If you ever decide to come back to this notebook or have to restart the notebook, you can start from here. The preprocessed data has been saved to disk.
 
-# In[7]:
+# In[1]:
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL
@@ -186,7 +186,7 @@ int_text, vocab_to_int, int_to_vocab, token_dict = helper.load_preprocess()
 # 
 # ### Check the Version of TensorFlow and Access to GPU
 
-# In[8]:
+# In[2]:
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL
@@ -214,7 +214,7 @@ else:
 # 
 # Return the placeholders in the following tuple `(Input, Targets, LearningRate)`
 
-# In[9]:
+# In[3]:
 
 def get_inputs():
     """
@@ -243,7 +243,7 @@ tests.test_get_inputs(get_inputs)
 # 
 # Return the cell and initial state in the following tuple `(Cell, InitialState)`
 
-# In[10]:
+# In[4]:
 
 def get_init_cell(batch_size, rnn_size):
     """
@@ -269,7 +269,7 @@ tests.test_get_init_cell(get_init_cell)
 # ### Word Embedding
 # Apply embedding to `input_data` using TensorFlow.  Return the embedded sequence.
 
-# In[11]:
+# In[5]:
 
 def get_embed(input_data, vocab_size, embed_dim):
     """
@@ -298,7 +298,7 @@ tests.test_get_embed(get_embed)
 # 
 # Return the outputs and final_state state in the following tuple `(Outputs, FinalState)` 
 
-# In[12]:
+# In[6]:
 
 def build_rnn(cell, inputs):
     """
@@ -327,7 +327,7 @@ tests.test_build_rnn(build_rnn)
 # 
 # Return the logits and final state in the following tuple (Logits, FinalState) 
 
-# In[13]:
+# In[7]:
 
 def build_nn(cell, rnn_size, input_data, vocab_size, embed_dim):
     """
@@ -380,7 +380,7 @@ tests.test_build_nn(build_nn)
 # ]
 # ```
 
-# In[14]:
+# In[8]:
 
 def get_batches(int_text, batch_size, seq_length):
     """
@@ -397,17 +397,21 @@ def get_batches(int_text, batch_size, seq_length):
         inputs = []
         targets = []
         for j in range(batch_size):
-            idx = i * seq_length + j * seq_length
+            idx = i * seq_length + j * n_batches * seq_length
             inputs.append(int_text[idx:idx + seq_length])
             targets.append(int_text[idx + 1:idx + seq_length + 1])
         result.append([inputs, targets])
     return np.array(result)
 
-
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
 """
 tests.test_get_batches(get_batches)
+
+
+# In[9]:
+
+get_batches([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], 2, 3)
 
 
 # ## Neural Network Training
@@ -422,12 +426,12 @@ tests.test_get_batches(get_batches)
 # - Set `learning_rate` to the learning rate.
 # - Set `show_every_n_batches` to the number of batches the neural network should print progress.
 
-# In[15]:
+# In[13]:
 
 # Number of Epochs
-num_epochs = 100
+num_epochs = 50
 # Batch Size
-batch_size = 128
+batch_size = 1024
 # RNN Size
 rnn_size = 256
 # Embedding Dimension Size
@@ -435,9 +439,9 @@ embed_dim = 300
 # Sequence Length
 seq_length = 25
 # Learning Rate
-learning_rate = 0.01
+learning_rate = 0.1
 # Show stats for every n number of batches
-show_every_n_batches = 50
+show_every_n_batches = 2
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
@@ -448,7 +452,7 @@ save_dir = './save'
 # ### Build the Graph
 # Build the graph using the neural network you implemented.
 
-# In[16]:
+# In[14]:
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL
@@ -484,7 +488,7 @@ with train_graph.as_default():
 # ## Train
 # Train the neural network on the preprocessed data.  If you have a hard time getting a good loss, check the [forms](https://discussions.udacity.com/) to see if anyone is having the same problem.
 
-# In[17]:
+# In[15]:
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL
@@ -522,7 +526,7 @@ with tf.Session(graph=train_graph) as sess:
 # ## Save Parameters
 # Save `seq_length` and `save_dir` for generating a new TV script.
 
-# In[18]:
+# In[16]:
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL
@@ -533,7 +537,7 @@ helper.save_params((seq_length, save_dir))
 
 # # Checkpoint
 
-# In[19]:
+# In[17]:
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL
@@ -557,7 +561,7 @@ seq_length, load_dir = helper.load_params()
 # 
 # Return the tensors in the following tuple `(InputTensor, InitialStateTensor, FinalStateTensor, ProbsTensor)` 
 
-# In[20]:
+# In[18]:
 
 def get_tensors(loaded_graph):
     """
@@ -582,7 +586,7 @@ tests.test_get_tensors(get_tensors)
 # ### Choose Word
 # Implement the `pick_word()` function to select the next word using `probabilities`.
 
-# In[22]:
+# In[19]:
 
 def pick_word(probabilities, int_to_vocab):
     """
@@ -604,7 +608,7 @@ tests.test_pick_word(pick_word)
 # ## Generate TV Script
 # This will generate the TV script for you.  Set `gen_length` to the length of TV script you want to generate.
 
-# In[23]:
+# In[20]:
 
 gen_length = 200
 # homer_simpson, moe_szyslak, or Barney_Gumble
@@ -656,3 +660,8 @@ with tf.Session(graph=loaded_graph) as sess:
 # It's ok if the TV script doesn't make any sense.  We trained on less than a megabyte of text.  In order to get good results, you'll have to use a smaller vocabulary or get more data.  Luckly there's more data!  As we mentioned in the begging of this project, this is a subset of [another dataset](https://www.kaggle.com/wcukierski/the-simpsons-by-the-data).  We didn't have you train on all the data, because that would take too long.  However, you are free to train your neural network on all the data.  After you complete the project, of course.
 # # Submitting This Project
 # When submitting this project, make sure to run all the cells before saving the notebook. Save the notebook file as "dlnd_tv_script_generation.ipynb" and save it as a HTML file under "File" -> "Download as". Include the "helper.py" and "problem_unittests.py" files in your submission.
+
+# In[ ]:
+
+
+
