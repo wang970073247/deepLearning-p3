@@ -426,22 +426,22 @@ get_batches([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], 2, 3)
 # - Set `learning_rate` to the learning rate.
 # - Set `show_every_n_batches` to the number of batches the neural network should print progress.
 
-# In[13]:
+# In[10]:
 
 # Number of Epochs
-num_epochs = 50
+num_epochs = 100
 # Batch Size
 batch_size = 1024
 # RNN Size
 rnn_size = 256
 # Embedding Dimension Size
-embed_dim = 300
+embed_dim = 256
 # Sequence Length
-seq_length = 25
+seq_length = 20
 # Learning Rate
-learning_rate = 0.1
+learning_rate = 0.01
 # Show stats for every n number of batches
-show_every_n_batches = 2
+show_every_n_batches = 1
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
@@ -452,7 +452,7 @@ save_dir = './save'
 # ### Build the Graph
 # Build the graph using the neural network you implemented.
 
-# In[14]:
+# In[11]:
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL
@@ -488,7 +488,7 @@ with train_graph.as_default():
 # ## Train
 # Train the neural network on the preprocessed data.  If you have a hard time getting a good loss, check the [forms](https://discussions.udacity.com/) to see if anyone is having the same problem.
 
-# In[15]:
+# In[12]:
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL
@@ -526,7 +526,7 @@ with tf.Session(graph=train_graph) as sess:
 # ## Save Parameters
 # Save `seq_length` and `save_dir` for generating a new TV script.
 
-# In[16]:
+# In[13]:
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL
@@ -537,7 +537,7 @@ helper.save_params((seq_length, save_dir))
 
 # # Checkpoint
 
-# In[17]:
+# In[14]:
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL
@@ -561,7 +561,7 @@ seq_length, load_dir = helper.load_params()
 # 
 # Return the tensors in the following tuple `(InputTensor, InitialStateTensor, FinalStateTensor, ProbsTensor)` 
 
-# In[18]:
+# In[15]:
 
 def get_tensors(loaded_graph):
     """
@@ -586,7 +586,7 @@ tests.test_get_tensors(get_tensors)
 # ### Choose Word
 # Implement the `pick_word()` function to select the next word using `probabilities`.
 
-# In[19]:
+# In[16]:
 
 def pick_word(probabilities, int_to_vocab):
     """
@@ -608,7 +608,7 @@ tests.test_pick_word(pick_word)
 # ## Generate TV Script
 # This will generate the TV script for you.  Set `gen_length` to the length of TV script you want to generate.
 
-# In[20]:
+# In[17]:
 
 gen_length = 200
 # homer_simpson, moe_szyslak, or Barney_Gumble
